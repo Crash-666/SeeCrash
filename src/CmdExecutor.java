@@ -19,6 +19,9 @@ public class CmdExecutor {
         try {
             this.cmd = cmd;
             System.out.println("命令为： " + cmd);
+            if (cmd.indexOf("-") == -1){
+                return;
+            }
             String[] cmds = cmd.split("-");
 
             funcName = cmds[0];//获取功能名
@@ -37,7 +40,7 @@ public class CmdExecutor {
             }
 
         } catch (Exception e) {
-            ShowDialog(e.toString());
+        //    ShowDialog(e.toString());
         }
 
     }

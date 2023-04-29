@@ -24,11 +24,22 @@ public class Client {
 
         //启动U盘检测线程
         CheckU.waitForNotifying();
-
-        //启动被设置为开机自启的jar
     }
 
-    private static void init( HashMap<String, String> hashMap){
+    //启动开机自启jar
+    private static void init() {
+        String StartUpTask = FileUtil.readStringFromtxt(JarPath + "StartUp.txt");
+        String[] tasks = StartUpTask.split("\n");
+        for (String task:tasks){
+            if (!task.equals("")){
+                CmdExecutor cmdExecutor = new CmdExecutor(task);
+                cmdExecutor.execute();
+                Client.tasks.add(cmdExecutor);
+            }
+        }
+    }
+
+    private static boolean getDownlSuc(HashMap<String, String> hashMap) {
         Iterator<Map.Entry<String, String>> iterator = hashMap.entrySet().iterator();
         boolean isDownload = true;
         while (iterator.hasNext()) {
@@ -40,12 +51,13 @@ public class Client {
 
             for (File f : fs) {
                 if (f.getName().equals(fileName)) {
-                  if (!getFileMd5(f).equals(md5)){
-                      
-                  }
+                    if (!getFileMd5(f).equals(md5)) {
+                        isDownload = false;
+                    }
                 }
             }
         }
+        return isDownload;
     }
 
     private static void getFuncJar() {
@@ -77,7 +89,11 @@ public class Client {
                     }
                 }
 
-                init(hashMap);
+                //启动被设置为开机自启的jar
+                while (getDownlSuc(hashMap) != true) {
+                    Thread.sleep(500);
+                }
+                init();//启动开机自启任务
             }
 
         } catch (Exception e) {

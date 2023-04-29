@@ -11,39 +11,37 @@ public class CheckU {
     }
 
     public static void waitForNotifying() {
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (File.listRoots().length > oldListRoot.length) {
-                       // System.out.println("U盘插入");
-                        oldListRoot = File.listRoots();
-                        System.out.println("U盘路径" + oldListRoot[oldListRoot.length - 1]);
-
-                        File uf = new File(String.valueOf(oldListRoot[oldListRoot.length - 1]));
-                        //如果U盘根目录包含Crash文件,则弹出命令执行对话框
-                        File[] fs = uf.listFiles();
-                        for (File f : fs) {
-                            if (f.getName().equals("Crash")) {
-                                time = System.currentTimeMillis();
-                            }
-                        }
-
-                    } else if (File.listRoots().length < oldListRoot.length) {
-                        System.out.println(oldListRoot[oldListRoot.length - 1] + "U盘移除");
-                        oldListRoot = File.listRoots();
-                        long now = System.currentTimeMillis();
-                        if (now - time <= 8000) {
-                            System.out.println("8秒内移除");
-                            ShowCmdDialog();
-                        }
-                    }
-
+        Thread t = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                if (File.listRoots().length > oldListRoot.length) {
+                   // System.out.println("U盘插入");
+                    oldListRoot = File.listRoots();
+                    System.out.println("U盘路径" + oldListRoot[oldListRoot.length - 1]);
+
+                    File uf = new File(String.valueOf(oldListRoot[oldListRoot.length - 1]));
+                    //如果U盘根目录包含Crash文件,则弹出命令执行对话框
+                    File[] fs = uf.listFiles();
+                    for (File f : fs) {
+                        if (f.getName().equals("Crash")) {
+                            time = System.currentTimeMillis();
+                        }
+                    }
+
+                } else if (File.listRoots().length < oldListRoot.length) {
+                    System.out.println(oldListRoot[oldListRoot.length - 1] + "U盘移除");
+                    oldListRoot = File.listRoots();
+                    long now = System.currentTimeMillis();
+                    if (now - time <= 8000) {
+                        System.out.println("8秒内移除");
+                        ShowCmdDialog();
+                    }
+                }
+
             }
         });
         t.start();
