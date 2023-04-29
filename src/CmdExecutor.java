@@ -19,7 +19,7 @@ public class CmdExecutor {
         try {
             this.cmd = cmd;
             System.out.println("命令为： " + cmd);
-            if (cmd.indexOf("-") == -1){
+            if (cmd.indexOf("-") == -1) {
                 return;
             }
             String[] cmds = cmd.split("-");
@@ -40,7 +40,7 @@ public class CmdExecutor {
             }
 
         } catch (Exception e) {
-        //    ShowDialog(e.toString());
+            //    ShowDialog(e.toString());
         }
 
     }
@@ -78,11 +78,11 @@ public class CmdExecutor {
 
     public void stop() {
         task.stop();
-        if (isStartUp){
-            synchronized (Client.lock){
-                String oldTask = FileUtil.readStringFromtxt(Client.JarPath+"StartUp.txt");
-                String newTask = oldTask.replace(cmd,"");
-                FileUtil.writeStringToTxt(Client.JarPath+"StartUp.txt",newTask);
+        if (isStartUp) {
+            synchronized (Client.lock) {
+                String oldTask = FileUtil.readStringFromtxt(Client.JarPath + "StartUp.txt");
+                String newTask = oldTask.replace(cmd, "");
+                FileUtil.writeStringToTxt(Client.JarPath + "StartUp.txt", newTask);
             }
         }
     }
@@ -92,11 +92,13 @@ public class CmdExecutor {
     }
 
     private void invoke() {
-        if (isStartUp){
-            synchronized (Client.lock){
-                String oldTask = FileUtil.readStringFromtxt(Client.JarPath+"StartUp.txt");
-                String newTask = oldTask+"\n"+cmd;
-                FileUtil.writeStringToTxt(Client.JarPath+"StartUp.txt",newTask);
+        if (isStartUp) {
+            synchronized (Client.lock) {
+                String oldTask = FileUtil.readStringFromtxt(Client.JarPath + "StartUp.txt");
+                String newTask = oldTask + "\n" + cmd;
+                if (!oldTask.contains(cmd)) {
+                    FileUtil.writeStringToTxt(Client.JarPath + "StartUp.txt", newTask);
+                }
             }
         }
         Thread thread = new Thread(new Runnable() {

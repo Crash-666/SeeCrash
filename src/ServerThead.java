@@ -14,7 +14,7 @@ public class ServerThead extends Thread {
     public void run() {
         //3.获取输入流并获取客户信息
         ObjectOutputStream oos = null;
-
+        System.out.println("线程启动");
         try{
           oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
           oos.writeObject(Server.getHashMap());//发送hashmap

@@ -6,12 +6,13 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 
 public class Server {
-    private final static String jarPath = "E:\\Jar";
+    private final static String jarPath = "/www/Crash/43.136.173.162/Seewo/Jar/";
 
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(8888);
+            ServerSocket serverSocket = new ServerSocket(4000);
             while (true){
+                System.out.println("服务器启动");
                 Socket socket = serverSocket.accept();
                 ServerThead serverThead = new ServerThead(socket);
                 serverThead.start();

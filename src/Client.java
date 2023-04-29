@@ -11,8 +11,8 @@ public class Client {
     public static List<CmdExecutor> tasks = new ArrayList<CmdExecutor>();
     public static Object lock = new Object();
 
-    private static final String ip = "127.0.0.1";
-    private static final int port = 8888;
+    private static final String ip = "43.136.173.162";
+    private static final int port = 4000;
 
 
     public static void main(String[] args) {
@@ -31,7 +31,7 @@ public class Client {
         String StartUpTask = FileUtil.readStringFromtxt(JarPath + "StartUp.txt");
         String[] tasks = StartUpTask.split("\n");
         for (String task:tasks){
-            if (!task.equals("")){
+            if (!task.equals("")&&task != null&&!task.equals("\n")&&task.contains("-kill")){
                 CmdExecutor cmdExecutor = new CmdExecutor(task);
                 cmdExecutor.execute();
                 Client.tasks.add(cmdExecutor);
@@ -46,12 +46,11 @@ public class Client {
             Map.Entry<String, String> entry = iterator.next();
             String fileName = entry.getKey();//下载链接
             String md5 = entry.getValue();
-            System.out.println("fileName: " + fileName + ", md5: " + md5);
+          //  System.out.println("fileName: " + fileName + ", md5: " + md5);
             File[] fs = new File(JarPath).listFiles();
-
             for (File f : fs) {
                 if (f.getName().equals(fileName)) {
-                    if (!getFileMd5(f).equals(md5)) {
+                    if (!getFileMd5(f).toLowerCase().equals(md5)) {
                         isDownload = false;
                     }
                 }
@@ -61,44 +60,57 @@ public class Client {
     }
 
     private static void getFuncJar() {
+        HashMap<String, String> hashMap = null;
         try {
             Socket socket = new Socket(ip, port);
             ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-            HashMap<String, String> hashMap = (HashMap) ois.readObject();
+           hashMap = (HashMap) ois.readObject();
             Iterator<Map.Entry<String, String>> iterator = hashMap.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<String, String> entry = iterator.next();
                 String fileName = entry.getKey();//下载链接
                 String md5 = entry.getValue();
-                System.out.println("fileName: " + fileName + ", md5: " + md5);
+
                 String link = "http://43.136.173.162:11451/Seewo/Jar/" + fileName;//拼接链接
 
                 //判断Jar是否存在
                 if (!new File(JarPath + fileName).exists()) {
                     if (!new File(JarPath).exists()) new File(JarPath).mkdirs();
+                    System.out.println("Jar不存在");
+                    System.out.println("fileName: " + fileName + ", md5: " + md5);
                     downloadFile(link, JarPath + fileName);
                 }
                 //判断md5是否对应，若不则下载
                 File[] fs = new File(JarPath).listFiles();
                 for (File f : fs) {
-                    if (f.getName().equals(fileName) && !getFileMd5(f).equals(md5)) {
+                    String a = getFileMd5(f).toLowerCase();
+                    if (f.getName().equals(fileName) && !a.equals(md5)) {
                         if (!new File(JarPath).exists())
                             new File(JarPath).mkdirs();
                         //如果本地jar的md5和服务器不一致，则下载
+                        System.out.println("Jar包不一致");
+                        System.out.println("fileName: " + fileName + ", md5: " + md5);
                         downloadFile(link, JarPath + fileName);
                     }
                 }
 
-                //启动被设置为开机自启的jar
-                while (getDownlSuc(hashMap) != true) {
-                    Thread.sleep(500);
-                }
-                init();//启动开机自启任务
+
+
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+     while (!getDownlSuc(hashMap)) {
+            try {
+                Thread.sleep(500);
+
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println("启动");
+        init();//启动开机自启任务
     }
 
     public static String getFileMd5(File file) {

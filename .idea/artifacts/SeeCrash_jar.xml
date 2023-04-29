@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SeeCrash:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SeeCrash_jar</output-path>
+    <root id="archive" name="SeeCrash_Server.jar">
+      <element id="module-output" name="SeeCrash" />
+    </root>
+  </artifact>
+</component>
