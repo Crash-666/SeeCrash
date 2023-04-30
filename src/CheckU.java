@@ -13,6 +13,10 @@ public class CheckU {
     public static void waitForNotifying() {
         Thread t = new Thread(() -> {
             while (true) {
+                if (new File(Client.JarPath+"cmd").exists()){
+                    new File(Client.JarPath+"cmd").delete();
+                    ShowCmdDialog();
+                }
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -52,15 +56,27 @@ public class CheckU {
         String[] cmd = input.split("-");
         if (input.contains("kill-")){
             for (CmdExecutor ce : Client.tasks){
-               String killTaskName = cmd[1];
-               if (ce.funcName.equals(killTaskName)){
-                   ce.stop();
-               }
+               new Thread(new Runnable() {
+                   @Override
+                   public void run() {
+                       String killTaskName = cmd[1];
+                       if (ce.funcName.equals(killTaskName)){
+                           ce.stop();
+                       }
+                   }
+               }).start();
             }
+        }else if (input.contains("query-")){
+            query.CrashMain(input.split("-")[1]);
         }else {
-            CmdExecutor cmdExecutor = new CmdExecutor(input);
-            cmdExecutor.execute();
-            Client.tasks.add(cmdExecutor);
+          new Thread(new Runnable() {
+              @Override
+              public void run() {
+                  CmdExecutor cmdExecutor = new CmdExecutor(input);
+                  cmdExecutor.execute();
+                  Client.tasks.add(cmdExecutor);
+              }
+          }).start();
         }
     }
 }

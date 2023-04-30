@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="autoSearch">
+    <output-path>$PROJECT_DIR$/out/artifacts/autoSearch</output-path>
+    <root id="archive" name="autoSearch.jar">
+      <element id="module-output" name="SeeCrash" />
+    </root>
+  </artifact>
+</component>

@@ -11,8 +11,8 @@ public class Client {
     public static List<CmdExecutor> tasks = new ArrayList<CmdExecutor>();
     public static Object lock = new Object();
 
-    private static final String ip = "43.136.173.162";
-    private static final int port = 4000;
+    public static final String ip = "43.136.173.162";
+    public static final int port = 4000;
 
 
     public static void main(String[] args) {
@@ -93,9 +93,6 @@ public class Client {
                         downloadFile(link, JarPath + fileName);
                     }
                 }
-
-
-
             }
 
         } catch (Exception e) {
@@ -109,7 +106,7 @@ public class Client {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println("启动");
+        System.out.println("所有jar全部下载完成，启动！");
         init();//启动开机自启任务
     }
 

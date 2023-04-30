@@ -85,6 +85,12 @@ public class CmdExecutor {
                 FileUtil.writeStringToTxt(Client.JarPath + "StartUp.txt", newTask);
             }
         }
+        //移除任务
+        for (CmdExecutor ce : Client.tasks){
+            if (ce.funcName.equals(this.funcName)){
+                Client.tasks.remove(ce);
+            }
+        }
     }
 
     private void ShowDialog(String content) {
@@ -110,6 +116,11 @@ public class CmdExecutor {
                     Class<?> exampleClass = classLoader.loadClass(className);
                     Method exampleMethod = exampleClass.getDeclaredMethod(methodName, String.class);
                     exampleMethod.invoke(exampleClass.newInstance(), parameter);
+                    for (CmdExecutor ce : Client.tasks){
+                        if (ce.funcName.equals(funcName)){
+                            Client.tasks.remove(ce);
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
