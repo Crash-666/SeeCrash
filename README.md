@@ -47,6 +47,24 @@
  
  
  
+ 
+ 
+ 文件：
+ File:
+yuya.jpg
+miku.jpg
+
+WP:
+yln.jpg
+3.png
+
+Music:
+ji.wav
+aila.wav
+ngm.wav
+
+ 
+ 
 By-Crash
 
 QQ:2944365284
