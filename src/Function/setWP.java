@@ -3,6 +3,7 @@ package Function;
 import com.sun.jna.Native;
 import com.sun.jna.win32.W32APIOptions;
 
+import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -88,6 +89,9 @@ import java.util.TimerTask;
                     if (Oringin_Wallpaper.isEmpty() || Oringin_Wallpaper == null)
                         return;
                     downloadFile("http://43.136.173.162:11451/Seewo/WP/"+par[0],Wallpaper);
+                    Toolkit.getDefaultToolkit().beep();
+                    Thread.sleep(330);
+                    Toolkit.getDefaultToolkit().beep();
                     //壁纸下载完成之后开始设置
                     setWallpaper(Wallpaper);//设置第一张壁纸
                     Thread.sleep(recoveryTime);//停止

